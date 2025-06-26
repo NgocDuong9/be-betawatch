@@ -7,6 +7,8 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrdersService } from './orders.service';
 import { Order } from './schemas/order.schema';
 
@@ -25,16 +27,16 @@ export class OrdersController {
   }
 
   @Post()
-  async create(@Body() orderData: Partial<Order>): Promise<Order> {
-    return this.ordersService.create(orderData);
+  async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+    return this.ordersService.create(createOrderDto);
   }
 
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateData: Partial<Order>,
+    @Body() updateOrderDto: UpdateOrderDto,
   ): Promise<Order | null> {
-    return this.ordersService.update(id, updateData);
+    return this.ordersService.update(id, updateOrderDto);
   }
 
   @Delete(':id')

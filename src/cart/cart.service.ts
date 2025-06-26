@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateCartDto } from './dto/create-cart.dto';
+import { UpdateCartDto } from './dto/update-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -10,9 +12,9 @@ export class CartService {
 
   addToCart(
     userId: string,
-    productId: string,
-    quantity: number,
+    createCartDto: CreateCartDto,
   ): { productId: string; quantity: number }[] {
+    const { productId, quantity } = createCartDto as CreateCartDto;
     const userCart = this.cart.get(userId) || [];
     const existingProduct = userCart.find(
       (item) => item.productId === productId,
@@ -37,6 +39,14 @@ export class CartService {
 
     this.cart.set(userId, updatedCart);
     return updatedCart;
+  }
+
+  updateCart(
+    userId: string,
+    updateCartDto: UpdateCartDto,
+  ): { productId: string; quantity: number }[] {
+    // Logic to update cart based on updateCartDto
+    return [];
   }
 
   clearCart(userId: string): void {

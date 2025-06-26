@@ -7,6 +7,8 @@ import {
   Param,
   Body,
 } from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './schemas/product.schema';
 
@@ -25,16 +27,16 @@ export class ProductsController {
   }
 
   @Post()
-  async create(@Body() productData: Partial<Product>): Promise<Product> {
-    return this.productsService.create(productData);
+  async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
+    return this.productsService.create(createProductDto);
   }
 
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateData: Partial<Product>,
+    @Body() updateProductDto: UpdateProductDto,
   ): Promise<Product | null> {
-    return this.productsService.update(id, updateData);
+    return this.productsService.update(id, updateProductDto);
   }
 
   @Delete(':id')

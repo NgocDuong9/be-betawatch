@@ -1,4 +1,6 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { AuthLoginDto } from './dto/auth-login.dto';
+import { AuthRegisterDto } from './dto/auth-register.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
@@ -7,15 +9,15 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() body: { username: string; password: string }) {
-    return this.authService.register(body.username, body.password);
+  async register(@Body() authRegisterDto: AuthRegisterDto) {
+    return this.authService.register(authRegisterDto);
   }
 
   @Post('login')
-  async login(@Body() body: { username: string; password: string }) {
+  async login(@Body() authLoginDto: AuthLoginDto) {
     const user = await this.authService.validateUser(
-      body.username,
-      body.password,
+      authLoginDto.email,
+      authLoginDto.password,
     );
     if (!user) {
       return { message: 'Invalid credentials' };

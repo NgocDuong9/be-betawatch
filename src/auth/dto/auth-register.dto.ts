@@ -3,11 +3,11 @@ import { IsString, IsEmail } from 'class-validator';
 
 export class AuthRegisterDto {
   @ApiProperty({
-    description: 'Tên của người dùng',
-    example: 'John Doe',
+    description: 'Tên đăng nhập của người dùng',
+    example: 'johndoe',
   })
   @IsString()
-  name: string;
+  username: string;
 
   @ApiProperty({
     description: 'Email của người dùng',

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "G-Shock",
+    "description": "Dòng đồng hồ siêu bền từ Casio, thiết kế hầm hố, phù hợp thể thao và quân đội."
+  },
+  {
+    "name": "Suunto",
+    "description": "Đồng hồ thể thao chuyên dụng cho trekking, leo núi, thể thao mạo hiểm."
+  },
+  {
+    "name": "Garmin",
+    "description": "Smartwatch GPS cho thể thao chuyên nghiệp như chạy bộ, đạp xe, bơi lội."
+  },
+  {
+    "name": "Polar",
+    "description": "Theo dõi thể lực và sức khoẻ chuyên sâu, dành cho người tập luyện nghiêm túc."
+  },
+  {
+    "name": "Timex Ironman",
+    "description": "Dòng đồng hồ thể thao cổ điển, được ưa chuộng nhiều năm qua."
+  }
+]

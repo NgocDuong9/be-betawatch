@@ -1,8 +1,17 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { AuthRegisterDto } from './dto/auth-register.dto';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -10,7 +19,13 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() authRegisterDto: AuthRegisterDto) {
-    return this.authService.register(authRegisterDto);
+    try {
+      return await this.authService.register(authRegisterDto);
+    } catch (error) {
+      // Nếu là lỗi đã biết thì throw lại, không thì trả về lỗi 500
+      if (error.status && error.message) throw error;
+      throw new Error('Đăng ký thất bại');
+    }
   }
 
   @Post('login')
@@ -20,14 +35,23 @@ export class AuthController {
       authLoginDto.password,
     );
     if (!user) {
-      return { message: 'Invalid credentials' };
+      throw new UnauthorizedException('Invalid credentials');
     }
     return this.authService.login(user);
   }
 
+  @Post('refresh-token')
+  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    const newAccessToken = await this.authService.refreshToken(
+      refreshTokenDto.refreshToken,
+    );
+    return newAccessToken;
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @ApiBearerAuth()
+  async getProfile(@Request() req) {
+    return this.authService.getUserProfileById(req.user.userId);
   }
 }

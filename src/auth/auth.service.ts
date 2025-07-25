@@ -1,10 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { User } from './schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 import { AuthRegisterDto } from './dto/auth-register.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -14,28 +20,76 @@ export class AuthService {
   ) {}
 
   async register(authRegisterDto: AuthRegisterDto): Promise<User> {
-    const { name, email, password } = authRegisterDto;
+    const { username, email, password } = authRegisterDto;
+    // Kiểm tra email đã tồn tại chưa
+    const existingUser = await this.userModel.findOne({ email });
+    if (existingUser) {
+      throw new BadRequestException('Email đã được đăng ký');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new this.userModel({
-      name,
+      username,
       email,
       password: hashedPassword,
     });
     return newUser.save();
   }
 
-  async validateUser(username: string, password: string): Promise<User | null> {
-    const user = await this.userModel.findOne({ username });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return user;
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      return null;
     }
-    return null;
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return null;
+    }
+    const userProfile = await this.getUserProfileById(user._id as string);
+    return userProfile;
   }
 
-  async login(user: User): Promise<{ accessToken: string }> {
+  async generateRefreshToken(userId: Types.ObjectId): Promise<string> {
+    const refreshToken = uuidv4();
+    await this.userModel.findByIdAndUpdate(userId, { refreshToken });
+    return refreshToken;
+  }
+
+  async login(user: User): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    user: { _id: any; username: string; email: string };
+  }> {
     const payload = { username: user.username, sub: user._id };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const userProfile = await this.getUserProfileById(user._id as string);
+
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken,
+      refreshToken,
+      user: userProfile,
     };
+  }
+
+  async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
+    try {
+      const payload = this.jwtService.verify(refreshToken);
+      const accessToken = this.jwtService.sign(
+        { username: payload.username, sub: payload.sub },
+        { expiresIn: '15m' },
+      );
+      return { accessToken };
+    } catch (e) {
+      throw new UnauthorizedException(
+        'Refresh token không hợp lệ hoặc đã hết hạn',
+      );
+    }
+  }
+
+  async getUserProfileById(userId: string) {
+    const user = await this.userModel.findById(userId).lean();
+    if (!user) throw new UnauthorizedException('User not found');
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 }

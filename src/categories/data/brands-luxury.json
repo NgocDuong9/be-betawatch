@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Rolex",
+    "description": "Biểu tượng của sự thành công và sang trọng, thương hiệu đồng hồ số 1 thế giới."
+  },
+  {
+    "name": "Omega",
+    "description": "Thương hiệu Thụy Sĩ với những thiết kế đẳng cấp, nổi tiếng qua James Bond."
+  },
+  {
+    "name": "Patek Philippe",
+    "description": "Đồng hồ siêu cao cấp, thủ công tinh xảo, biểu tượng của giới siêu giàu."
+  },
+  {
+    "name": "Audemars Piguet",
+    "description": "Đồng hồ xa xỉ, nổi bật với dòng Royal Oak được giới mộ điệu ưa chuộng."
+  },
+  {
+    "name": "Hublot",
+    "description": "Phong cách thể thao – sang trọng, thường kết hợp chất liệu độc đáo."
+  }
+]

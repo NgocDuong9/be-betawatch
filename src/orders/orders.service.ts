@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Order } from './schemas/order.schema';
@@ -10,25 +10,69 @@ export class OrdersService {
   constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
 
   async findAll(): Promise<Order[]> {
-    return this.orderModel.find().exec();
+    try {
+      return await this.orderModel.find().exec();
+    } catch (error) {
+      throw new HttpException(
+        'Lỗi lấy danh sách đơn hàng',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findOne(id: string): Promise<Order | null> {
-    return this.orderModel.findById(id).exec();
+    try {
+      const order = await this.orderModel.findById(id).exec();
+      if (!order)
+        throw new HttpException(
+          'Không tìm thấy đơn hàng',
+          HttpStatus.NOT_FOUND,
+        );
+      return order;
+    } catch (error) {
+      throw new HttpException(
+        'Lỗi lấy đơn hàng',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async create(orderData: CreateOrderDto): Promise<Order> {
-    const newOrder = new this.orderModel(orderData);
-    return newOrder.save();
+    try {
+      const newOrder = new this.orderModel(orderData);
+      return await newOrder.save();
+    } catch (error) {
+      throw new HttpException('Lỗi tạo đơn hàng', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async update(id: string, updateData: UpdateOrderDto): Promise<Order | null> {
-    return this.orderModel
-      .findByIdAndUpdate(id, updateData, { new: true })
-      .exec();
+    try {
+      const updated = await this.orderModel
+        .findByIdAndUpdate(id, updateData, { new: true })
+        .exec();
+      if (!updated)
+        throw new HttpException(
+          'Không tìm thấy đơn hàng',
+          HttpStatus.NOT_FOUND,
+        );
+      return updated;
+    } catch (error) {
+      throw new HttpException('Lỗi cập nhật đơn hàng', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async delete(id: string): Promise<Order | null> {
-    return this.orderModel.findByIdAndDelete(id).exec();
+    try {
+      const deleted = await this.orderModel.findByIdAndDelete(id).exec();
+      if (!deleted)
+        throw new HttpException(
+          'Không tìm thấy đơn hàng',
+          HttpStatus.NOT_FOUND,
+        );
+      return deleted;
+    } catch (error) {
+      throw new HttpException('Lỗi xóa đơn hàng', HttpStatus.BAD_REQUEST);
+    }
   }
 }

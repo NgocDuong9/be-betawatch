@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Đồng hồ nam",
+    "description": "Bộ sưu tập đồng hồ dành cho nam giới, mang phong cách lịch lãm và mạnh mẽ."
+  },
+  {
+    "name": "Đồng hồ nữ",
+    "description": "Những mẫu đồng hồ tinh tế, thanh lịch dành cho nữ giới."
+  },
+  {
+    "name": "Đồng hồ cao cấp",
+    "description": "Các mẫu đồng hồ xa xỉ từ những thương hiệu hàng đầu thế giới, thiết kế vô cùng tinh xảo."
+  },
+  {
+    "name": "Đồng hồ thể thao",
+    "description": "Đồng hồ chuyên dụng cho hoạt động thể thao, độ bền cao, chống nước và tích hợp nhiều tính năng."
+  },
+  {
+    "name": "Phụ kiện",
+    "description": "Tổng hợp các phụ kiện đồng hồ: dây, hộp, dụng cụ,..."
+  }
+]

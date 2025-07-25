@@ -1,22 +1,55 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsNumber,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateOrderDto {
-  @ApiProperty({
-    description: 'ID của sản phẩm',
-    example: '12345',
-    required: false,
-  })
+class UpdateOrderProductDto {
+  @ApiProperty({ example: 'productId123', required: false })
   @IsOptional()
   @IsString()
-  productId?: string;
+  product?: string;
 
-  @ApiProperty({
-    description: 'Số lượng sản phẩm',
-    example: 2,
-    required: false,
-  })
+  @ApiProperty({ example: 2, required: false })
   @IsOptional()
   @IsNumber()
   quantity?: number;
+
+  @ApiProperty({ example: 100000, required: false })
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @ApiProperty({ example: [{ key: 'color', value: 'red' }], required: false })
+  @IsOptional()
+  @IsArray()
+  attributes?: { key: string; value: string }[];
+}
+
+export class UpdateOrderDto {
+  @ApiProperty({ type: [UpdateOrderProductDto], required: false })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => UpdateOrderProductDto)
+  products?: UpdateOrderProductDto[];
+
+  @ApiProperty({ example: 'completed', required: false })
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @ApiProperty({ example: '123 Main St', required: false })
+  @IsOptional()
+  @IsString()
+  shippingAddress?: string;
+
+  @ApiProperty({ example: 'cod', required: false })
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
 }

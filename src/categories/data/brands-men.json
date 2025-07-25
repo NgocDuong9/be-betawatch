@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Seiko",
+    "description": "Thương hiệu đồng hồ Nhật Bản nổi tiếng với chất lượng ổn định và thiết kế mạnh mẽ cho nam giới."
+  },
+  {
+    "name": "Citizen",
+    "description": "Đồng hồ công nghệ Eco-Drive hiện đại, phong cách lịch lãm."
+  },
+  {
+    "name": "Orient",
+    "description": "Chuyên dòng đồng hồ cơ, bền bỉ, giá hợp lý dành cho nam."
+  },
+  {
+    "name": "Casio Edifice",
+    "description": "Phong cách thể thao, hiện đại, tích hợp nhiều chức năng."
+  },
+  {
+    "name": "Tissot",
+    "description": "Thương hiệu Thụy Sĩ lâu đời, thiết kế cổ điển dành cho quý ông."
+  }
+]

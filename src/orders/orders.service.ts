@@ -46,19 +46,23 @@ export class OrdersService {
     }
   }
 
-  async update(id: string, updateData: UpdateOrderDto): Promise<Order | null> {
+  async update(id: string, updateData: UpdateOrderDto): Promise<Order> {
     try {
       const updated = await this.orderModel
         .findByIdAndUpdate(id, updateData, { new: true })
         .exec();
-      if (!updated)
+      if (!updated) {
         throw new HttpException(
           'Không tìm thấy đơn hàng',
           HttpStatus.NOT_FOUND,
         );
+      }
       return updated;
     } catch (error) {
-      throw new HttpException('Lỗi cập nhật đơn hàng', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error?.message || 'Lỗi cập nhật đơn hàng',
+        error?.status || HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

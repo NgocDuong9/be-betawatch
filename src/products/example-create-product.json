@@ -1,0 +1,32 @@
+{
+  "name": "Áo thun nam cotton cao cấp",
+  "description": "Áo thun nam được làm từ 100% cotton tự nhiên, thoáng mát, thấm hút mồ hôi tốt. Thiết kế đơn giản, phù hợp với mọi hoàn cảnh.",
+  "price": 299000,
+  "images": [
+    "https://example.com/images/ao-thun-nam-1.jpg",
+    "https://example.com/images/ao-thun-nam-2.jpg",
+    "https://example.com/images/ao-thun-nam-3.jpg"
+  ],
+  "category": "60f7c2b8e1b1c8a1b8e1b1c8",
+  "stock": 50,
+  "isActive": true,
+  "tags": ["thoi-trang", "nam", "ao-thun", "cotton", "cao-cap"],
+  "attributes": [
+    {
+      "key": "color",
+      "value": "trắng"
+    },
+    {
+      "key": "size",
+      "value": "L"
+    },
+    {
+      "key": "material",
+      "value": "cotton 100%"
+    },
+    {
+      "key": "weight",
+      "value": "180g"
+    }
+  ]
+}

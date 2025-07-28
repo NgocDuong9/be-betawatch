@@ -1,20 +1,19 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Param,
-  Body,
-  NotFoundException,
   BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
   InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
-import { Product } from './schemas/product.schema';
 
 @ApiTags('products')
 @Controller('products')
